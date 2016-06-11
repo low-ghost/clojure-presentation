@@ -1,4 +1,4 @@
-# Clojure for Microservices
+# Clojure Presentation
 ## Language Basics
 ### Everything is a Form
 A form can be only one of two things: a value or an operation. Values look pretty similar to other values.
@@ -116,8 +116,15 @@ Duplicate keys will cause an exception. However, this'll be ok, though potential
 ```clojure
 {:a 1 "a" 2}
 ```
+###### Sets
+Sets are defined with hash and square brackets.
+```clojure
+#{1 2 3}
+```
+Duplicate keys will throw.
 ### Working with collections
-##### get and get-in
+One of the tenants of clojure is programming to abstraction such that functions work similarly regardless of the type of the paramater. Thus thinking in terms of datatypes and which functions can work on them is probably wrong headed and it would be better to think 'cons adds an element at the beginning of that collection' etc. However, it'll help get our feet wet with the data types we've covered.
+##### Getting Values
 You can get values out of maps, sets, vectors etc via get or by using the value as a getter:
 ```clojure
 (get {:key "value" :nextKey "nextValue"} :key) // "value"
@@ -129,7 +136,8 @@ You can get values out of maps, sets, vectors etc via get or by using the value 
 Some other neat functions and functionality: get can provide a defaut and get-in can get nested values:
 ```clojure
 (get {:key "value"} :nextKey "not in map") // "not in map"
-(get-in {:key {:nested {:thrice "value" } } } [:key :nested :thrice]) // "value"
+({:key "value"} :nextKey "not in map") // "not in map"
+(get-in {:key {:nested {:thrice "value"}}} [:key :nested :thrice]) // "value"
 ```
 ##### Adding and removing values
 Adding elements:
@@ -141,13 +149,13 @@ Adding elements:
 // cons for sets, vectors and lists
 (cons 1 #{2 3 4}) // [1 2 3 4]
 (cons 1 [2 3 4]) // [1 2 3 4]
-(cons 4 '(1 2 3)) // (4 1 2 3)
+(cons 1 '(2 3 4)) // (4 1 2 3)
 // conj for sets, vectors and lists
 (conj #{1 2 3} 4 5) // #{1 2 3 4 5}
 (conj [1 2 3] 4 5) // [1 2 3 4 5]
 (conj '(1 2 3) 4 5) // (5 4 1 2 3)
 // concat for sets, vectors, lists and sequences, at once
-(concat '(1 2) [3 4] #{5 6} (range 7 9)) // (1 2 3 4 5 6 7 8)
+(concat '(1 2) [3 4] #{5 6} (range 7 9)) // (1 2 3 4 5 6 7 8) which is a lazy sequence
 ```
 Removing elements:
 ```clojure
