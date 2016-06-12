@@ -11,10 +11,10 @@ Note the whitespace delimited values in the vector. Nice right? Commas will be t
 
 Forms are designated with parenthesis and only with parenthesis (well except for literal values as above). You won't see any if/fi case/esac nonesense, nor python's space delimeted blocks, or the soup of curly brackets, parenthesis, semicolons, commas etc. in many languages.
 ```clojure
-(+ 1 2 3 4) // 10
-(str "This " "is " "a clojure " "string") // "This is a clojure string"
-(first [1 2 3 4]) // 1
-(map inc [1 2 3 4]) // [2 3 4 5]
+(+ 1 2 3 4) ; => 10
+(str "This " "is " "a clojure " "string") ; => "This is a clojure string"
+(first [1 2 3 4]) ; => 1
+(map inc [1 2 3 4]) ; => [2 3 4 5]
 ```
 Parenthesis can be a little overwhelming. Here's a bit of code from the low-level html library ring:
 ```clojure
@@ -73,14 +73,14 @@ Weird, right? But lets break down the standard math equation. We know order of o
 Little bit closer to clojure. All of the expressions so far translate into english as 'divide 4 by 2 then multiply by 8 then add 1 then add 1'. If we use the 'then' type operator in clojure called the thread first macro, this code looks even more like our english:
 ```clojure
 (-> 4 (/ 2) (* 8) (+ 1 1))
-// start with 4, divide by 2, multiply by 8, add 1, then add 1
+; start with 4, divide by 2, multiply by 8, add 1, then add 1
 ```
 ### Values
 We've already seen numbers, strings and vectors: `1 "sting" [ 1 2 3 ]`. We'll jump into these and others in a bit more detail.
 ##### Numbers
 Clojure numbers are from java.lang.Number and support BigInteger, BigDecimal, plus clojure's own Ratio. A ratio looks like `1/2` and does operations like:
 ```clojure
-(+ 1/2 5/7) // 17/14
+(+ 1/2 5/7) ; => 17/14
 ```
 BigIntegers and BigDecimals are contagious such that operations with them convert lesser types. Clojure also provides apostrophied methods--+', -', etc.--that convert types automatically.
 ##### Strings
@@ -98,10 +98,6 @@ Vectors are array-backed, numerically indexed and equate via length first, then 
 Lists are defined with a single quote and parentheses like:
 ```clojure
 '(1, 1/2, "one")
-```
-Lists are linked-list collections. Lists, vectors and other sequences all share a large number of functions and can even be concatted.
-```clojure
-(concat [1 2] '(3 4)) // (1 2 3 4)
 ```
 ###### Maps
 Maps are defined with curly brackets:
@@ -127,43 +123,43 @@ One of the tenants of clojure is programming to abstraction such that functions 
 ##### Getting Values
 You can get values out of maps, sets, vectors etc via get or by using the value as a getter:
 ```clojure
-(get {:key "value" :nextKey "nextValue"} :key) // "value"
-({:key "value" :nextKey "nextValue"} :key) // "value"
-({"key" "value" "nextKey" "nextValue"} "key") // "value"
-(get [ 1 2 3 ] 0) // 1
-([ 1 2 3] 1) // 2
+(get {:key "value" :nextKey "nextValue"} :key) ; => "value"
+({:key "value" :nextKey "nextValue"} :key) ; => "value"
+({"key" "value" "nextKey" "nextValue"} "key") ; => "value"
+(get [ 1 2 3 ] 0) ; => 1
+([ 1 2 3] 1) ; => 2
 ```
-Some other neat functions and functionality: get can provide a defaut and get-in can get nested values:
+Some other neat functions and functionality: get can provide a default and get-in can get nested values:
 ```clojure
-(get {:key "value"} :nextKey "not in map") // "not in map"
-({:key "value"} :nextKey "not in map") // "not in map"
-(get-in {:key {:nested {:thrice "value"}}} [:key :nested :thrice]) // "value"
+(get {:key "value"} :nextKey "not in map") ; => "not in map"
+({:key "value"} :nextKey "not in map") ; => "not in map"
+(get-in {:key {:nested {:thrice "value"}}} [:key :nested :thrice]) ; => "value"
 ```
 ##### Adding and removing values
 Adding elements:
 ```clojure
 // assoc for vectors and maps
-(assoc [1 2 3] 2 4) // [1 2 4]
-(assoc [1 2 3] 3 4) // [1 2 3 4]
-(assoc {:a 1 :b 2} :c 3 :d 4) // {:a 1 :b 2 :c 3 :d 4}
+(assoc [1 2 3] 2 4) ; => [1 2 4]
+(assoc [1 2 3] 3 4) ; => [1 2 3 4]
+(assoc {:a 1 :b 2} :c 3 :d 4) ; => {:a 1 :b 2 :c 3 :d 4}
 // cons for sets, vectors and lists
-(cons 1 #{2 3 4}) // [1 2 3 4]
-(cons 1 [2 3 4]) // [1 2 3 4]
-(cons 1 '(2 3 4)) // (4 1 2 3)
+(cons 1 #{2 3 4}) ; => [1 2 3 4]
+(cons 1 [2 3 4]) ; => [1 2 3 4]
+(cons 1 '(2 3 4)) ; => (4 1 2 3)
 // conj for sets, vectors and lists
-(conj #{1 2 3} 4 5) // #{1 2 3 4 5}
-(conj [1 2 3] 4 5) // [1 2 3 4 5]
-(conj '(1 2 3) 4 5) // (5 4 1 2 3)
+(conj #{1 2 3} 4 5) ; => #{1 2 3 4 5}
+(conj [1 2 3] 4 5) ; => [1 2 3 4 5]
+(conj '(1 2 3) 4 5) ; => (5 4 1 2 3)
 // concat for sets, vectors, lists and sequences, at once
 (concat '(1 2) [3 4] #{5 6} (range 7 9)) // (1 2 3 4 5 6 7 8) which is a lazy sequence
 ```
 Removing elements:
 ```clojure
 // dissoc for vectors and maps
-(dissoc {:a 1 :b 2 :c 3} :b :c) // {:a 1}
+(dissoc {:a 1 :b 2 :c 3} :b :c) s; => {:a 1}
 // disj for sets
-(disj #{10 20 30} 20 30 50) // #{10}
+(disj #{10 20 30} 20 30 50) ; => #{10}
 // pop for vectors and lists
-(pop [1 2 3 4]) // [1 2 3]
-(pop '(1 2 3 4)) // [1 2 3]
+(pop [1 2 3 4]) ; => [1 2 3]
+(pop '(1 2 3 4)) ; => [1 2 3]
 ```
