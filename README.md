@@ -1,4 +1,26 @@
-# Clojure Presentation
+# Clojure For Microservice Architectures
+## Why Clojure
+### Simplicity
+Clojure focuses heavily on minimizing complexity. The language is built from the ground up with simplicity in mind and lisp variants have the shallowest learning curve of any programing language. Achieving simplicity without reducing power and flexibility is the most important goal of any language. Simplicity means faster iteration, faster developer onloading, easier and more effective debugging, eazier refactoring and less stomping on your keyboard.
+### Speed
+Clojure is impressively fast. As a hand-wavy summation, clojure is about 5 times faster than [python] (http://benchmarksgame.alioth.debian.org/u64q/compare.php?lang=clojure&lang2=python3), ruby and javascript and is [generally at the tail end of languages designed for speed](http://benchmarksgame.alioth.debian.org/u64q/which-programs-are-fastest.html), just a little behind java itself, scala and go but beating C#.
+### Community
+A strong community gives clojure excellent tooling, plenty of helpful tutorials, great books and videos and a good warm feeling that the language isn't going to just die in obscurity.
+### Macros
+A language with dead-simple macro support is ideal for microservices. With macros, a developer can write the language that best suites the purpose of the particular domain of a microservice. Think about it, a language that can dynamically write itself is intensly powerful and flexible. Other languages have some macro support, but lisp is unique in that you don't have to learn essentially a different language or parse an AST. It's almost as easy to write a macro as it is a function.
+### Java Interop and the JVM
+Java and clojure are much more closely bound than the word interoperability normally implies. Calling java code from clojure is incredibly simple and remains within the idiomatic bounds of clojure's syntax. Infact, some of the clojure language actually is java; strings, for example are just java.lang.String. Not to scare the reader with parenthesis right off the bat, but here's a few quick examples to show just how congruent the languages are:
+```clojure
+(.toUpperCase "this string")
+; => "THIS STRING"
+; is exactly equivalent to "this string".toUpperCase() in java
+(Math/floor 8.123)
+; => 8
+; Uses java's java.lang.Math. All java.lang classes are imported by default
+```
+Being on the JVM means that a developer has access to anything within the vast java ecosystem. It also means that you can run clojure code in the exact same way and in the exact same environments as java. You can even (but why in hell would you) use maven. Finally, it means that developers could write their api's and web framework in simple, user-friendly clojure and drop to java when complex.
+### Functional Programming for Easy Concurrency and Immutable Data
+Notice how I had to add the prepositional phrase to the above title just to stop you from squirming at the word 'Functional'? Clojure has plenty of OO constructs, but it is pretty heavily a functional language. This is good news for a microservice because it means incredibly easy parallelizaion while removing possible complications of race conditions and so on. Clojure also has data structures which are immutable by default (but which can be worked with in mutable ways if you really need to). This removes a slew of potential bugs and makes programs easier to reason about.
 ## Language Basics
 ### Everything is a Form
 A form can be only one of two things: a value or an operation. Values look pretty similar to other values.
