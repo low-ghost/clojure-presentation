@@ -18,7 +18,7 @@ Java and clojure are much more closely bound than the word interoperability norm
 ; => 8
 ; Uses java's java.lang.Math. All java.lang classes are imported by default
 ```
-Being on the JVM means that a developer has access to anything within the vast java ecosystem. It also means that you can run clojure code in the exact same way and in the exact same environments as java. You can even (but why in hell would you) use maven. Finally, it means that developers could write their api's and web framework in simple, user-friendly clojure and drop to java when complex.
+Being on the JVM means that a developer has access to anything within the vast java ecosystem. It also means that you can run clojure code in the exact same way and in the exact same environments as java. You can even (but why in hell would you) use maven. Finally, it means that developers could write their api's and web framework in simple, user-friendly clojure and drop to java when complex, cpu heavy computations are needed. You might never need to though, given clojure's speed.
 ### Functional Programming for Easy Concurrency and Immutable Data
 Notice how I had to add the prepositional phrase to the above title just to stop you from squirming at the word 'Functional'? Clojure has plenty of OO constructs, but it is pretty heavily a functional language. This is good news for a microservice because it means incredibly easy parallelizaion while removing possible complications of race conditions and so on. Clojure also has data structures which are immutable by default (but which can be worked with in mutable ways if you really need to). This removes a slew of potential bugs and makes programs easier to reason about.
 ## Language Basics
@@ -38,7 +38,13 @@ Forms are designated with parenthesis and only with parenthesis (well except for
 (first [1 2 3 4]) ; => 1
 (map inc [1 2 3 4]) ; => [2 3 4 5]
 ```
-Parenthesis can be a little overwhelming. Here's a bit of code from the low-level html library ring:
+These forms are the basis of all clojure. Even the data types are actually just shorthand for their form constructor:
+```
+(vector 1 2 3)
+(list 4 5 6)
+```
+But more on that later.
+Parenthesis can be a little overwhelming. Here's a bit of what is actually perfectly neat and reasonable code from the low-level html library [ring](https://github.com/ring-clojure/ring):
 ```clojure
 (defn url-response
   "Return a response for the supplied URL."
@@ -49,7 +55,7 @@ Parenthesis can be a little overwhelming. Here's a bit of code from the low-leve
         (content-length (:content-length data))
         (last-modified (:last-modified data)))))
 ```
-However, it get's clearer with time. Compare this to other langauges like javascript that have a mix of expression designators:
+However, it get's clearer with time. Compare this to other langauges like javascript that have a mix of expression designators: curly braces, parentheses, dot and infix operators, commas, semi-colons etc:
 ```js
 // JS
 _.concat(
@@ -68,18 +74,11 @@ _.concat(
 ```clojure
 (concat
     (map
-        (fn [x] (+ x 1))
-        [0 1 2])
-    [4 5] [6])
-```
-Not a perfect example, and both can be rewritten using some better syntax (composition or chaining in js, thread macro in clojure). And hey, there's something new, an anonymous function. We'll get to that in a bit, but anonymous functions can, like es6 arrows, be written in a shorthand without the 'fn' operator. So, to be more fair to clojure, the above code could be written:
-```clojure
-(concat
-    (map
         (#(+ % 1))
         [0 1 2])
     [4 5] [6])
 ```
+Not a perfect example, and both can be rewritten using some better syntax (composition or chaining in js, thread macro in clojure). And hey, there's something new, an anonymous function. We'll get to that in a bit.
 Parenthesis and the form structure can also be confusing where traditional infix operation is used, mathematics in particular. For instance, the follow expression
 ```code
 1 + 4 / 2 * 8 + 1
@@ -184,4 +183,27 @@ Removing elements:
 // pop for vectors and lists
 (pop [1 2 3 4]) ; => [1 2 3]
 (pop '(1 2 3 4)) ; => [1 2 3]
+```
+### Defining values and functions
+Values are defined with the def function:
+```clojure
+(def greek-gods ["Zeus" "Apollo" "Ares"])
+greek-gods ; => ["Zeus" "Apollo" "Ares"]
+(def greek-goddesses #{"Hera" "Athena" "Demeter"})
+greek-goddesses ; => #{"Hera" "Athena" "Demeter"}
+```
+Functions are defined with defn and uses square brackets to define paramaters and can have python docstring style comments:
+```clojure
+(defn multiply-by-5
+  "Just multiplies the input by 5"
+  [some-number]
+  (* 5 some-number))
+```
+Functions in clojure can have different bodies based on their arity.
+```clojure
+(defn arity-arity
+  "Does different things depending on the number of params"
+  ([] (str "no args"))
+  ([x] (str "One arg:" x))
+  ([x y] (str "Two args:" x y)))
 ```
