@@ -1,15 +1,15 @@
 # Clojure For Microservice Architectures
 ## Why Clojure
 ### Simplicity
-Clojure focuses heavily on minimizing complexity. The language is built from the ground up with simplicity in mind and lisp variants have the shallowest learning curve of any programing language. Achieving simplicity without reducing power and flexibility is the most important goal of any language. Simplicity means faster iteration, faster developer onloading, easier and more effective debugging, eazier refactoring and less stomping on your keyboard.
+Clojure focuses heavily on minimizing complexity. The language is built from the ground up with simplicity in mind and lisp variants have the shallowest learning curve of any programing language. Achieving simplicity without reducing power and flexibility is the most important goal of any language. Simplicity means faster iteration, faster developer onloading, easier and more effective debugging, easier refactoring and less stomping on your keyboard.
 ### Speed
 Clojure is impressively fast. As a hand-wavy summation, clojure is about 5 times faster than [python] (http://benchmarksgame.alioth.debian.org/u64q/compare.php?lang=clojure&lang2=python3), ruby and javascript and is [generally at the tail end of languages designed for speed](http://benchmarksgame.alioth.debian.org/u64q/which-programs-are-fastest.html), just a little behind java itself, scala and go but beating C#.
 ### Community
 A strong community gives clojure excellent tooling, plenty of helpful tutorials, great books and videos and a good warm feeling that the language isn't going to just die in obscurity.
 ### Macros
-A language with dead-simple macro support is ideal for microservices. With macros, a developer can write the language that best suites the purpose of the particular domain of a microservice. Think about it, a language that can dynamically write itself is intensly powerful and flexible. Other languages have some macro support, but lisp is unique in that you don't have to learn essentially a different language or parse an AST. It's almost as easy to write a macro as it is a function.
+A language with dead-simple macro support is ideal for microservices. With macros, a developer can write the language that best suites the purpose of the particular domain of a microservice. Think about it, a language that can dynamically write itself is intensely powerful and flexible. Other languages have some macro support, but lisp is unique in that you don't have to learn essentially a different language or parse an AST. It's almost as easy to write a macro as it is a function.
 ### Java Interop and the JVM
-Java and clojure are much more closely bound than the word interoperability normally implies. Calling java code from clojure is incredibly simple and remains within the idiomatic bounds of clojure's syntax. Infact, some of the clojure language actually is java; strings, for example are just java.lang.String. Not to scare the reader with parenthesis right off the bat, but here's a few quick examples to show just how congruent the languages are:
+Java and clojure are much more closely bound than the word interoperability normally implies. Calling java code from clojure is incredibly simple and remains within the idiomatic bounds of clojure's syntax. In fact, some of the clojure language actually is java; strings, for example are just java.lang.String. Not to scare the reader with parenthesis right off the bat, but here's a few quick examples to show just how congruent the languages are:
 ```clojure
 (.toUpperCase "this string")
 ; => "THIS STRING"
@@ -20,7 +20,11 @@ Java and clojure are much more closely bound than the word interoperability norm
 ```
 Being on the JVM means that a developer has access to anything within the vast java ecosystem. It also means that you can run clojure code in the exact same way and in the exact same environments as java. You can even (but why in hell would you) use maven. Finally, it means that developers could write their api's and web framework in simple, user-friendly clojure and drop to java when complex, cpu heavy computations are needed. You might never need to though, given clojure's speed.
 ### Functional Programming for Easy Concurrency and Immutable Data
-Notice how I had to add the prepositional phrase to the above title just to stop you from squirming at the word 'Functional'? Clojure has plenty of OO constructs, but it is pretty heavily a functional language. This is good news for a microservice because it means incredibly easy parallelizaion while removing possible complications of race conditions and so on. Clojure also has data structures which are immutable by default (but which can be worked with in mutable ways if you really need to). This removes a slew of potential bugs and makes programs easier to reason about.
+Notice how I had to add the prepositional phrase to the above title just to stop you from squirming at the word 'Functional'? Clojure has plenty of OO constructs, but it is pretty heavily a functional language. This is good news for a microservice because it means incredibly easy parallelization while removing possible complications of race conditions and so on. Clojure also has data structures which are immutable by default (but which can be worked with in mutable ways if you really need to). This removes a slew of potential bugs and makes programs easier to reason about.
+### Innovations and Ideas Driving Modern Programming
+Clojure is a major inspiration in for a lot of the ideas in contemporary programing. There's ripe fruit to take back to any language. Some of the topics we'll cover later include transducers, programming to abstraction, Software Transactional Memory, immutable data (and especially it's influence on and inclusion in react/redux), hot reloading, generative testing, concurrency based on channels (exactly go's model), schema as run-time contracts, and more.
+### Cons: Imperfect Static Typing
+The major downside of clojure may be that it is not built from the ground up with a sound typing system. Clojure does include tools for static typing and static analysis, however optionally applying these types to a dynamically typed language comes nowhere near the power that a functional language with sound typings can give (mostly thinking haskell). We'll investigate core.typed, but as far as I have seen, there is not a large adoption of this tool set and several large clojure based groups (CircleCI specifically) have made the switch to runtime schema validation claiming that core.typed never quite payed out the amount of time and effort it took to maintain.
 ## Language Basics
 ### Everything is a Form
 A form can be only one of two things: a value or an operation. Values look pretty similar to other values.
@@ -31,7 +35,7 @@ A form can be only one of two things: a value or an operation. Values look prett
 ```
 Note the whitespace delimited values in the vector. Nice right? Commas will be translated to whitespace and thus banished.
 
-Forms are designated with parenthesis and only with parenthesis (well except for literal values as above). You won't see any if/fi case/esac nonesense, nor python's space delimeted blocks, or the soup of curly brackets, parenthesis, semicolons, commas etc. in many languages.
+Forms are designated with parenthesis and only with parenthesis (well except for literal values as above). You won't see any if/fi case/esac nonsense, nor python's space delimited blocks, or the soup of curly brackets, parenthesis, semicolons, commas etc. in many languages.
 ```clojure
 (+ 1 2 3 4) ; => 10
 (str "This " "is " "a clojure " "string") ; => "This is a clojure string"
@@ -55,7 +59,7 @@ Parenthesis can be a little overwhelming. Here's a bit of what is actually perfe
         (content-length (:content-length data))
         (last-modified (:last-modified data)))))
 ```
-However, it get's clearer with time. Compare this to other langauges like javascript that have a mix of expression designators: curly braces, parentheses, dot and infix operators, commas, semi-colons etc:
+However, it gets clearer with time. Compare this to other langauges like javascript that have a mix of expression designators: curly braces, parentheses, dot and infix operators, commas, semi-colons etc:
 ```js
 // JS
 _.concat(
@@ -91,7 +95,7 @@ Weird, right? But lets break down the standard math equation. We know order of o
 ```code
 ((4 / 2) * 8) + 1 + 1
 ```
-Little bit closer to clojure. All of the expressions so far translate into english as 'divide 4 by 2 then multiply by 8 then add 1 then add 1'. If we use the 'then' type operator in clojure called the thread first macro, this code looks even more like our english:
+Little bit closer to clojure. All of the expressions so far translate into English as 'divide 4 by 2 then multiply by 8 then add 1 then add 1'. If we use the 'then' type operator in clojure called the thread first macro, this code looks even more like our English:
 ```clojure
 (-> 4 (/ 2) (* 8) (+ 1 1))
 ; start with 4, divide by 2, multiply by 8, add 1, then add 1
@@ -103,7 +107,7 @@ Clojure numbers are from java.lang.Number and support BigInteger, BigDecimal, pl
 ```clojure
 (+ 1/2 5/7) ; => 17/14
 ```
-BigIntegers and BigDecimals are contagious such that operations with them convert lesser types. Clojure also provides apostrophied methods--+', -', etc.--that convert types automatically.
+BigIntegers and BigDecimals are contagious such that operations with them convert lesser types. Clojure also provides apostrophized methods--+', -', etc.--that convert types automatically.
 ##### Strings
 Strings are java strings. More later, but defined with double quotes.
 ```clojure
@@ -139,8 +143,10 @@ Sets are defined with hash and square brackets.
 #{1 2 3}
 ```
 Duplicate keys will throw.
+###### Nil
+All undefined values are nil. No undefined/null/None nonsense.
 ### Working with collections
-One of the tenants of clojure is programming to abstraction such that functions work similarly regardless of the type of the paramater. Thus thinking in terms of datatypes and which functions can work on them is probably wrong headed and it would be better to think 'cons adds an element at the beginning of that collection' etc. However, it'll help get our feet wet with the data types we've covered.
+One of the tenants of clojure is programming to abstraction such that functions work similarly regardless of the type of the parameter. Thus thinking in terms of datatypes and which functions can work on them is probably wrong headed and it would be better to think 'cons adds an element at the beginning of that collection' etc. However, it'll help get our feet wet with the data types we've covered.
 ##### Getting Values
 You can get values out of maps, sets, vectors etc via get or by using the value as a getter:
 ```clojure
@@ -192,7 +198,7 @@ greek-gods ; => ["Zeus" "Apollo" "Ares"]
 (def greek-goddesses #{"Hera" "Athena" "Demeter"})
 greek-goddesses ; => #{"Hera" "Athena" "Demeter"}
 ```
-Functions are defined with defn and uses square brackets to define paramaters and can have python docstring style comments:
+Functions are defined with defn and uses square brackets to define parameters and can have python docstring style comments:
 ```clojure
 (defn multiply-by-5
   "Just multiplies the input by 5"
@@ -206,4 +212,11 @@ Functions in clojure can have different bodies based on their arity.
   ([] (str "no args"))
   ([x] (str "One arg:" x))
   ([x y] (str "Two args:" x y)))
+```
+Rest args are defined after an ampersand:
+```clojure
+(defn foo [a b & rest]
+  (println a b more-args))
+(foo 1 2) ; => 1 2 nil
+(foo 1 2 3 4) ; => 1 2 (3 4)
 ```
