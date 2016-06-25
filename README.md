@@ -85,20 +85,20 @@ _.concat(
 Not a perfect example, and both can be rewritten using some better syntax (composition or chaining in js, thread macro in clojure). And hey, there's something new, an anonymous function. We'll get to that in a bit.
 Parenthesis and the form structure can also be confusing where traditional infix operation is used, mathematics in particular. For instance, the follow expression
 ```code
-1 + 4 / 2 * 8 + 1
+1 + 4 * 2 / 8 + 1
 ```
 Makes sense to us because of our elementary school math classes. To do the same in clojure would look like
 ```clojure
-(+ (* (/ 4 2) 8) 1 1)
+(+ (/ 8 (* 4 2)) 1 1)
 ```
 Weird, right? But lets break down the standard math equation. We know order of operations, but that expression might be clearer with some of the parenthesis in place and reordered:
 ```code
-((4 / 2) * 8) + 1 + 1
+((4 * 2) / 8) + 1 + 1
 ```
 Little bit closer to clojure. All of the expressions so far translate into English as 'divide 4 by 2 then multiply by 8 then add 1 then add 1'. If we use the 'then' type operator in clojure called the thread first macro, this code looks even more like our English:
 ```clojure
-(-> 4 (/ 2) (* 8) (+ 1 1))
-; start with 4, divide by 2, multiply by 8, add 1, then add 1
+(-> 4 (* 2) (/ 8) (+ 1 1))
+; start with 4, multiply by 2, divide by 8, add 1, then add 1
 ```
 ### Values
 We've already seen numbers, strings and vectors: `1 "sting" [ 1 2 3 ]`. We'll jump into these and others in a bit more detail.
