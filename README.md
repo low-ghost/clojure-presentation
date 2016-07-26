@@ -220,3 +220,35 @@ Rest args are defined after an ampersand:
 (foo 1 2) ; => 1 2 nil
 (foo 1 2 3 4) ; => 1 2 (3 4)
 ```
+## What can we bring from the clojure community to other languages?
+### Generative Testing
+#### Why?
+Unit tests are both incredibly important and a pain in the ass. In particular, there is a huge amount of work involved before you get to any holy ground actual guarentees about the safety of a program. Generative testing aims to automate some of the tedium and find edge cases that you might not be apparent by developers cleverly attempting to break a function.
+#### Basics
+Here's the idea: instead of manually writing out data for a function's input use just describe the data (we already are for static typing, documentation and so on) and use a library to come up with the data for us. Here's a typical function. We've already seen it before because I'm lazy:
+```clojure
+(defn multiply-by-5
+  "Just multiplies the input by 5"
+  [some-number]
+  (* 5 some-number))
+```
+A typical test would look like this:
+```clojure
+(deftest multiply-by-5
+  (is (= 25 (multiply-by-5 5))))
+```
+About as simple as it gets. And yet, we actually haven't covered much of the functionality yet. Here's a few more tests we'll need:
+```clojure
+(deftest multiply-by-5
+  (is (= 5 (multiply-by-5 1))))
+
+(deftest multiply-by-5
+  (is (= 0 (multiply-by-5 0))))
+
+(deftest multiply-by-5
+  (is (= -20 (multiply-by-5 -4))))
+  
+(deftest multiply-by-5
+  (is (= 5/2 (multiply-by-5 1/2))))
+```
+And there's still more to cover. Of course it's ridiculous to actually unit test multiplication, but use your imagination. A generative tests starts with a method of randomly generating input values. Clojure/test.generative to the rescue.
